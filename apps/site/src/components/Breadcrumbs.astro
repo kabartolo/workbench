@@ -1,0 +1,43 @@
+---
+// src/components/Breadcrumbs.astro
+import { Breadcrumbs, BreadcrumbsItem } from 'accessible-astro-components';
+
+interface Props {
+  /**
+   * Additional classes to apply to the breadcrumbs container
+   */
+  class?: string
+  /**
+   * Accessible label for the breadcrumb navigation
+   * @default 'Breadcrumbs'
+   */
+  ariaLabel?: string
+}
+
+const { ancestors = [] } = Astro.locals.sundropDocs || {};
+
+const [ home, ...segments ] = ancestors;
+const currentPage = segments.pop();
+const middle = segments;
+---
+
+{ancestors.length > 0 && (
+<Breadcrumbs>
+  <BreadcrumbsItem
+    href={home.path}
+    label={home.label ?? home.path}
+  />
+  {middle.map((ancestor) => (
+    <BreadcrumbsItem
+      href={`/${ancestor.path}`}
+      label={ancestor.label ?? ancestor.path}
+    />
+  ))}
+  <BreadcrumbsItem
+    label={currentPage.label ?? currentPage.path}
+    isCurrentPage
+  />
+
+
+</Breadcrumbs>
+)}

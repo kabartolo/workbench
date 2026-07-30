@@ -1,0 +1,35 @@
+---
+export interface Props {
+  version?: string;
+}
+
+const { version = 'v1.0.0' } = Astro.props;
+---
+
+<div class="sundrop-sidebar-footer">
+  <slot>
+    <span class="version-tag sidebar-text">{version}</span>
+  </slot>
+</div>
+
+<style>
+@layer sundrop-components {
+  .sundrop-sidebar-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--sundrop-scale-3) var(--sundrop-scale-4);
+    border-top: 1px solid var(--sundrop-color-border-default);
+    flex-shrink: 0;
+    min-height: 3rem;
+    box-sizing: border-box;
+    color: var(--sundrop-color-fg-muted);
+    font-size: var(--sundrop-size-small);
+  }
+
+  .version-tag {
+    font-family: var(--sundrop-font-mono);
+    opacity: 0.7;
+  }
+}
+</style>

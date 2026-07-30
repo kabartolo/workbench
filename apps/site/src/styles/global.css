@@ -1,0 +1,217 @@
+@import url('./theme.css');
+
+@layer sundrop-components {
+  :where(
+    .sundrop-body h1,
+    .sundrop-body h2,
+    .sundrop-body h3,
+    .sundrop-body h4,
+    .sundrop-body h5,
+    .sundrop-body h6
+  ) {
+    text-wrap: balance;
+    margin-top: var(--sundrop-space-xl);
+    margin-bottom: var(--sundrop-space-sm);
+  }
+
+  :where(.sundrop-body h1, .sundrop-body h2) {
+    font-weight: 600;
+  }
+  :where(
+    .sundrop-body h3,
+    .sundrop-body h4,
+    .sundrop-body h5,
+    .sundrop-body h6
+  ) {
+    font-weight: 500;
+  }
+
+  :where(.sundrop-body h1) {
+    font-size: var(--sundrop-size-h1);
+    line-height: 1.2;
+  }
+  :where(.sundrop-body h2) {
+    font-size: var(--sundrop-size-h2);
+    line-height: 1.3;
+  }
+  :where(.sundrop-body h3) {
+    font-size: var(--sundrop-size-h3);
+    line-height: 1.4;
+  }
+  :where(.sundrop-body h4) {
+    font-size: var(--sundrop-size-h4);
+    line-height: 1.4;
+  }
+  :where(.sundrop-body h5) {
+    font-size: var(--sundrop-size-h5);
+    line-height: 1.5;
+  }
+  :where(.sundrop-body h6) {
+    font-size: var(--sundrop-size-h6);
+    line-height: 1.5;
+  }
+
+  :where(.sundrop-body p) {
+    margin-bottom: var(--sundrop-space-md);
+    line-height: 1.7;
+  }
+}
+
+body {
+  font-family: var(--sundrop-font-sans);
+  margin: 0;
+  padding: 0;
+  text-align: left;
+  background-color: var(--sundrop-color-canvas-default);
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  color: var(--sundrop-color-fg-default);
+  font-size: var(--sundrop-size-body);
+  line-height: 1.6;
+}
+
+main {
+  /* intentionally empty — layout controlled by Default.astro grid */
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin: var(--sundrop-space-lg) 0 var(--sundrop-space-sm);
+  color: var(--sundrop-color-fg-default);
+  line-height: 1.25;
+  font-weight: 600;
+}
+
+h1 {
+  font-size: var(--sundrop-size-h1);
+}
+h2 {
+  font-size: var(--sundrop-size-h2);
+}
+h3 {
+  font-size: var(--sundrop-size-h3);
+}
+h4 {
+  font-size: var(--sundrop-size-h4);
+}
+h5 {
+  font-size: var(--sundrop-size-h5);
+}
+h6 {
+  font-size: var(--sundrop-size-h6);
+  color: var(--sundrop-color-fg-muted);
+}
+
+strong,
+b {
+  font-weight: 600;
+}
+
+a {
+  color: var(--sundrop-color-fg-accent-cool);
+  /* text-decoration: none; */
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+p {
+  margin-top: 0;
+  margin-bottom: var(--sundrop-space-md);
+}
+
+.prose p {
+  margin-bottom: var(--sundrop-space-lg);
+}
+
+textarea,
+input {
+  font-size: 14px;
+  font-family: inherit;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+
+th,
+td {
+  padding: 6px 13px;
+  border: 1px solid var(--sundrop-color-border-default);
+}
+
+tr:nth-child(even) {
+  background-color: var(--sundrop-color-canvas-subtle);
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 6px;
+}
+
+code {
+  font-family: var(--sundrop-font-mono);
+  font-size: 85%;
+  padding: 0.2em 0.4em;
+  background-color: var(--sundrop-color-code-bg);
+  border-radius: 6px;
+}
+
+pre {
+  font-family: var(--sundrop-font-mono);
+  font-size: 85%;
+  padding: var(--sundrop-space-md);
+  border-radius: 6px;
+  background-color: var(--sundrop-color-canvas-subtle);
+  border: 1px solid var(--sundrop-color-border-default);
+  overflow-x: auto;
+  line-height: 1.45;
+}
+
+pre > code {
+  all: unset;
+}
+
+blockquote {
+  border-left: 4px solid var(--sundrop-color-border-default);
+  padding: 0 var(--sundrop-space-md);
+  margin: 0 0 var(--sundrop-space-md);
+  color: var(--sundrop-color-fg-muted);
+  font-size: 1rem;
+}
+
+hr {
+  border: none;
+  border-top: 1px solid var(--sundrop-color-border-default);
+  margin: var(--sundrop-space-lg) 0;
+}
+
+@media (max-width: 720px) {
+  body {
+    font-size: 15px; /* Overrides the root scale down slightly for mobile layout parity */
+  }
+  main {
+    padding: var(--sundrop-space-md);
+  }
+}
+
+.sr-only {
+  border: 0;
+  padding: 0;
+  margin: 0;
+  position: absolute !important;
+  height: 1px;
+  width: 1px;
+  overflow: hidden;
+  clip: rect(1px, 1px, 1px, 1px);
+  clip-path: inset(50%);
+  white-space: nowrap;
+}

@@ -1,0 +1,70 @@
+---
+
+
+const { prev, next } = Astro.props;
+---
+
+{(prev || next) && (
+<nav class="sundrop-pagination" aria-label="Page navigation">
+    <div class="pagination-prev">
+    {prev && (
+        <a href={prev.path} class="sundrop-pagination-link">
+        <span class="direction">Previous</span>
+        <span class="label">{prev.label}</span>
+        </a>
+    )}
+    </div>
+    <div class="pagination-next">
+    {next && (
+        <a href={next.path} class="sundrop-pagination-link">
+        <span class="direction">Next</span>
+        <span class="label">{next.label}</span>
+        </a>
+    )}
+    </div>
+</nav>
+)}
+
+<style>
+
+  /* --- Layout Pagination Styles --- */
+  .sundrop-pagination {
+    display: flex;
+    justify-content: space-between;
+    margin-top: var(--sundrop-space-2xl, 3rem);
+    padding-top: var(--sundrop-space-md, 1rem);
+    border-top: 1px solid var(--sundrop-border, #eaeaea);
+  }
+
+  .pagination-prev, .pagination-next {
+    width: 48%;
+  }
+
+  .pagination-next {
+    text-align: right;
+  }
+
+  .sundrop-pagination-link {
+    display: flex;
+    flex-direction: column;
+    text-decoration: none;
+    color: var(--sundrop-text-muted, #666666);
+  }
+
+  .sundrop-pagination-link:hover .label {
+    color: var(--sundrop-accent, #0076ff);
+    text-decoration: underline;
+  }
+
+  .sundrop-pagination-link .direction {
+    font-size: var(--sundrop-size-xs, 0.75rem);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .sundrop-pagination-link .label {
+    font-size: var(--sundrop-size-base, 1rem);
+    font-weight: 500;
+    color: var(--sundrop-text, #1a1a1a);
+  }
+</style>

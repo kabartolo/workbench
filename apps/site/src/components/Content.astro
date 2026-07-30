@@ -1,0 +1,26 @@
+---
+import Breadcrumbs from "./Breadcrumbs.astro";
+import Pagination from "./Pagination.astro";
+
+const { title, description, prev, next } = Astro.props;
+---
+
+<article class="sundrop-body">
+  <div class="breadcrumb-wrapper">
+    <Breadcrumbs />
+  </div>
+  <h1>{title}</h1>
+  <slot />
+  <Pagination prev={prev} next={next} />
+</article>
+
+<style>
+  article {
+    width: 680px;
+    margin: 0 auto;
+  }
+
+  .breadcrumb-wrapper {
+    height: 40px;
+  }
+</style>

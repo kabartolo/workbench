@@ -1,0 +1,152 @@
+@layer sundrop-theme {
+  :root {
+    --sundrop-scale-1: 0.25rem;
+    --sundrop-scale-2: 0.5rem;
+    --sundrop-scale-3: 0.75rem;
+    --sundrop-scale-4: 1rem;
+    --sundrop-scale-5: 1.5rem;
+    --sundrop-scale-6: 2rem;
+
+    --sundrop-font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+    --sundrop-font-mono: 'Space Mono', ui-monospace, monospace;
+
+    --sundrop-size-small: 0.75rem;
+    --sundrop-size-body: 0.875rem;
+    --sundrop-size-h6: 0.875rem;
+    --sundrop-size-h5: 1rem;
+    --sundrop-size-h4: 1.125rem;
+    --sundrop-size-h3: 1.25rem;
+    --sundrop-size-h2: 1.5rem;
+    --sundrop-size-h1: 2rem;
+    --sundrop-size-lg: 1.25rem;
+    --sundrop-size-2xl: 2.25rem;
+
+    --sundrop-space-sm: 0.5rem;
+    --sundrop-space-md: 1rem;
+    --sundrop-space-lg: 1.5rem;
+    --sundrop-space-xl: 2rem;
+    --sundrop-space-2xl: 3rem;
+
+    /* Vintage Terminal Raw Colors */
+    --vt-cream: #fdfbf7;
+    --vt-linen: #f4f1ea;
+    --vt-parchment: #d1c9bc;
+    --vt-ink: #1c241e;
+    --vt-slate-green: #6b756d;
+    --vt-charcoal: #111827;
+    --vt-amber-light: #fdf2e2;
+    --vt-amber-dark: #c27803;
+    --vt-pine-light: #e6f2ec;
+    --vt-pine-dark: #067a53;
+
+    --vt-dark-olive: #0f1410;
+    --vt-dark-linen: #171e19;
+    --vt-matrix-green: #2a362d;
+    --vt-alabaster: #f4f6f4;
+    --vt-fern: #78887b;
+    --vt-amber-glow: #f59e0b;
+    --vt-phosphor: #8af3a2;
+    --vt-charcoal-amber: #261f13;
+    --vt-cathode: #16241b;
+
+    /* --df-pine: #0B130E; */
+    /* --df-moss: #16221A; */
+
+    /* Canvas & Borders (Strictly monochrome) */
+    --sundrop-color-canvas-default: #ffffff; /* Pure White */
+    --sundrop-color-canvas-subtle: #f8f9fa; /* Very soft, clean gray for code blocks/sidebars */
+    --sundrop-color-border-default: #e5e7eb; /* Crisp, subtle line break */
+
+    /* Text / Foreground (High contrast utility) */
+    --sundrop-color-fg-default: #111827; /* Near black for maximum legibility */
+    --sundrop-color-fg-muted: #4b5563; /* Solid medium gray for secondary text/metadata */
+
+    /* Accents & Highlights (Kept minimal and functional) */
+    --sundrop-color-fg-accent: #111827; /* Primary elements stay black */
+    --sundrop-color-fg-accent-warm: #9a3412; /* Deep rust/amber only used for critical warnings */
+    --sundrop-color-fg-accent-cool: #1f2937; /* Deep charcoal for links (consider underlining them for style) */
+
+    /* Surfaces & Badges */
+    --sundrop-color-surface-warm: #fef3c7; /* Light amber tint for warning callouts */
+    --sundrop-color-surface-cool: #f3f4f6; /* Clean, neutral gray badge background */
+  }
+
+  [data-theme='dark'] {
+    /* Canvas & Borders (Obsidian Midnight Blue) */
+    --sundrop-color-canvas-default: #030712; /* Deepest, near-black blue-gray */
+    --sundrop-color-canvas-subtle: #0b132b; /* Very dark navy for cards, sidebars, and code blocks */
+    --sundrop-color-border-default: #1e293b; /* Subtle slate seam to outline containers */
+
+    /* Text / Foreground */
+    --sundrop-color-fg-default: #f8fafc;
+    --sundrop-color-fg-muted: #64748b; /* Muted slate text (slightly dimmed for deep dark mode) */
+
+    /* Accents & Highlights (Luminous contrast against near-black) */
+    --sundrop-color-fg-accent: #a5b4fc; /* Slightly brightened Periwinkle for readability */
+    --sundrop-color-fg-accent-warm: #fde047;
+    --sundrop-color-fg-accent-cool: #38bdf8; /* Vibrant, clear Blue-Green/Sky for glowing links */
+
+    /* Surfaces & Badges */
+    --sundrop-color-surface-warm: #2e250a;
+    --sundrop-color-surface-cool: #0c1e36; /* Deep ink wash for highlighted lines/badges */
+  }
+}
+
+@layer sundrop-components {
+  :where(
+    .sundrop-body h1,
+    .sundrop-body h2,
+    .sundrop-body h3,
+    .sundrop-body h4,
+    .sundrop-body h5,
+    .sundrop-body h6
+  ) {
+    text-wrap: balance;
+    margin-top: var(--sundrop-space-xl);
+    margin-bottom: var(--sundrop-space-sm);
+  }
+
+  :where(.sundrop-body h1, .sundrop-body h2) {
+    font-weight: 600;
+  }
+
+  :where(
+    .sundrop-body h3,
+    .sundrop-body h4,
+    .sundrop-body h5,
+    .sundrop-body h6
+  ) {
+    font-weight: 500;
+  }
+
+  :where(.sundrop-body h1) {
+    font-size: var(--sundrop-size-h1);
+    line-height: 1.2;
+    letter-spacing: -0.04em;
+  }
+  :where(.sundrop-body h2) {
+    font-size: var(--sundrop-size-h2);
+    line-height: 1.3;
+  }
+  :where(.sundrop-body h3) {
+    font-size: var(--sundrop-size-h3);
+    line-height: 1.4;
+  }
+  :where(.sundrop-body h4) {
+    font-size: var(--sundrop-size-h4);
+    line-height: 1.4;
+  }
+  :where(.sundrop-body h5) {
+    font-size: var(--sundrop-size-h5);
+    line-height: 1.5;
+  }
+  :where(.sundrop-body h6) {
+    font-size: var(--sundrop-size-h6);
+    line-height: 1.5;
+  }
+
+  :where(.sundrop-body p) {
+    margin-bottom: var(--sundrop-space-md);
+    line-height: 1.7;
+  }
+}

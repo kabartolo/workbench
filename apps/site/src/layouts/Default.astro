@@ -1,0 +1,171 @@
+---
+import Header from "../components/Header.astro";
+import "../styles/global.css";
+import DefaultSidebarHeader from "../components/Sidebar/SidebarHeader.astro";
+import DefaultSidebarFooter from "../components/Sidebar/SidebarFooter.astro";
+import SidebarPanel from "../components/Sidebar/SidebarPanel.astro";
+import SidebarPanelToggle from "../components/Sidebar/SidebarPanelToggle.astro";
+
+export interface Props {
+  title: string;
+  description?: string;
+  sidebarCollapseMode?: 'hidden' | 'icons';
+}
+
+const { title, description, sidebarCollapseMode = 'hidden' } = Astro.props;
+---
+
+<html lang="en" data-theme="light">
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="utf-8" />
+  <title>{title}</title>
+  {description && <meta name="description" content={description} />}
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Google+Sans:ital,opsz,wght@0,17..18,400..700;1,17..18,400..700&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
+
+  <script is:inline>
+    const savedTheme = localStorage.getItem('sundrop-theme');
+    if (savedTheme) {
+      document.documentElement.setAttribute('data-theme', savedTheme);
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+      document.documentElement.setAttribute('data-theme', 'dark');
+    } else {
+      document.documentElement.setAttribute('data-theme', 'light');
+    }
+  </script>
+</head>
+<body>
+  <Header />
+
+  <div class="sundrop-shell">
+  <SidebarPanel class="panel-left" collapseMode={sidebarCollapseMode}>
+    <div class="panel-left-header">
+      {Astro.slots.has('sidebar-header') ? (
+        <slot name="sidebar-header" />
+      ) : (
+        <DefaultSidebarHeader />
+      )}
+    </div>
+
+    <div class="panel-left-main">
+      <slot name="sidebar-main" />
+    </div>
+
+    <div class="panel-left-footer">
+      {Astro.slots.has('sidebar-footer') ? (
+        <slot name="sidebar-footer" />
+      ) : (
+        <DefaultSidebarFooter />
+      )}
+    </div>
+  </SidebarPanel>
+
+    <main>
+       <div class="docs-topbar">
+        <SidebarPanelToggle />
+      </div>
+      <slot name="content" />
+    </main>
+
+    <aside class="panel-right">
+      <slot name="right-sidebar" />
+    </aside>
+  </div>
+</body>
+</html>
+
+<style>
+  body {
+    margin: 0;
+    font-family: var(--sundrop-font-sans);
+    font-size: var(--sundrop-size-body);
+    background-color: var(--sundrop-color-canvas-default);
+    color: var(--sundrop-color-fg-default);
+  }
+
+  .sundrop-shell {
+    display: grid;
+    grid-template-columns: 280px 1fr 280px;
+    min-height: 100vh;
+    width: 100%;
+    transition: grid-template-columns 0.2s ease;
+  }
+
+  .sundrop-shell[data-sidebar-collapsed="true"] {
+    grid-template-columns: 2.5rem 1fr 280px;
+  }
+
+  .sundrop-shell > main {
+    grid-column: 2;
+    padding: 0 10px;
+    min-width: 0;
+  }
+
+  .docs-topbar {
+    display: flex;
+    align-items: center;
+    padding: var(--sundrop-scale-2) 0;
+    margin-bottom: var(--sundrop-scale-4);
+  }
+  
+  :global(.panel-left) {
+    grid-column: 1;
+    max-width: 280px;
+    height: calc(100vh - 64px);
+    overflow: hidden;
+    background-color: var(--sundrop-color-canvas-subtle);
+    border-right: 1px solid var(--sundrop-color-border-default);
+    display: flex;
+    flex-direction: column;
+  }
+
+  .panel-left-header {
+    flex-shrink: 0;
+    min-height: 48px;
+    max-height: 80px;
+  }
+
+  .panel-left-main {
+    flex: 1;
+    overflow-y: auto;
+    min-height: 0;
+  }
+
+  .panel-left-footer {
+    flex-shrink: 0;
+    min-height: 48px;
+    max-height: 80px;
+  }
+
+  .panel-right {
+    grid-column: 3;
+    position: sticky;
+    top: 64px;
+    height: calc(100vh - 64px);
+    overflow-y: auto;
+    background-color: var(--sundrop-color-canvas-subtle);
+    border-left: 1px solid var(--sundrop-color-border-default);
+    padding: var(--sundrop-scale-4);
+  }
+
+  @media (max-width: 1024px) {
+    .sundrop-shell {
+      display: flex;
+      flex-direction: column;
+    }
+
+    :global(.panel-left),
+    .panel-right {
+      position: static;
+      height: auto;
+      width: 100%;
+      max-width: 100%;
+      border: none;
+      overflow: visible;
+    }
+  }
+</style>

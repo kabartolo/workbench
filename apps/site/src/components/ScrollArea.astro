@@ -1,0 +1,62 @@
+---
+export interface Props {
+  className?: string;
+  horizontal?: boolean;
+}
+
+const { className = '', horizontal = false } = Astro.props;
+---
+
+<div class:list={['sundrop-scroll-area', { 'is-horizontal': horizontal }, className]}>
+  <slot />
+</div>
+
+<style>
+  .sundrop-scroll-area {
+    width: 100%;
+    height: 100%;
+    overflow-y: auto;
+    overflow-x: hidden;
+
+    /* Firefox custom scrollbar styling */
+    scrollbar-width: thin;
+    scrollbar-color: transparent transparent; /* Hidden by default */
+    transition: scrollbar-color 0.2s ease;
+  }
+
+  .sundrop-scroll-area.is-horizontal {
+    overflow-x: auto;
+    overflow-y: hidden;
+  }
+
+  /* Reveal thumb on hover (Firefox) */
+  .sundrop-scroll-area:hover {
+    scrollbar-color: var(--sundrop-scroll-thumb, rgba(150, 150, 150, 0.4)) transparent;
+  }
+
+  /* WebKit Browsers (Chrome, Safari, Edge) */
+  .sundrop-scroll-area::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+
+  .sundrop-scroll-area::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  .sundrop-scroll-area::-webkit-scrollbar-thumb {
+    background-color: transparent; /* Subtle/Hidden until hovered */
+    border-radius: 9999px; /* Pill shape like Shadcn */
+    transition: background-color 0.2s ease;
+  }
+
+  /* Hover state: Reveal thumb on hover */
+  .sundrop-scroll-area:hover::-webkit-scrollbar-thumb {
+    background-color: var(--sundrop-scroll-thumb, rgba(150, 150, 150, 0.4));
+  }
+
+  /* Active drag state */
+  .sundrop-scroll-area::-webkit-scrollbar-thumb:hover {
+    background-color: var(--sundrop-scroll-thumb-hover, rgba(100, 100, 100, 0.7));
+  }
+</style>

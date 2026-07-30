@@ -1,0 +1,50 @@
+---
+export interface Props {
+  collapseMode?: 'hidden' | 'icons';
+  class?: string;
+}
+
+const { collapseMode = 'hidden', class: className = '' } = Astro.props;
+---
+
+<aside
+  class:list={['sundrop-sidebar-panel', className]}
+  id="sundrop-sidebar-panel"
+  data-collapse-mode={collapseMode}
+  data-collapsed="false"
+  aria-label="Sidebar navigation"
+>
+  <slot />
+</aside>
+
+<script is:inline>
+  (function () {
+    const match = document.cookie.match(/sidebar-collapsed=([^;]+)/);
+    const collapsed = match?.[1] === 'true';
+    const panel = document.getElementById('sundrop-sidebar-panel');
+    const shell = document.querySelector('.sundrop-shell');
+    if (collapsed) {
+      if (panel) panel.dataset.collapsed = 'true';
+      if (shell) shell.dataset.sidebarCollapsed = 'true';
+    }
+  })();
+</script>
+
+<style>
+@layer sundrop-components {
+  .sundrop-sidebar-panel {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    overflow: hidden;
+  }
+
+  /* Target only the typography blocks and toggles, keeping lists active */
+  .sundrop-sidebar-panel[data-collapse-mode="icons"][data-collapsed="true"] :global(.sidebar-text),
+  .sundrop-sidebar-panel[data-collapse-mode="icons"][data-collapsed="true"] :global(.brand-title),
+  .sundrop-sidebar-panel[data-collapse-mode="icons"][data-collapsed="true"] :global(.sundrop-group-label),
+  .sundrop-sidebar-panel[data-collapse-mode="icons"][data-collapsed="true"] :global(.sundrop-chevron) {
+    display: none !important;
+  }
+}
+</style>

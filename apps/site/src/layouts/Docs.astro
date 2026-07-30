@@ -1,0 +1,26 @@
+---
+import Default from './Default.astro';
+import Sidebar from "../components/Sidebar/Sidebar.astro";
+import Content from "../components/Content.astro";
+import type { SidebarGroup } from "../components/Sidebar/Sidebar.astro";
+
+export type PageRef = { label: string; path: string; };
+
+export interface Props {
+  title: string;
+  description?: string;
+  sidebar?: SidebarGroup[];
+  prev?: PageRef;
+  next?: PageRef;
+}
+
+const { title, sidebar, description, prev, next } = Astro.props;
+---
+
+<Default title={title} description={description} sidebarCollapseMode="hidden">
+  {sidebar && sidebar.length > 0 && <Sidebar slot="sidebar-main" sidebar={sidebar} />}
+
+  <Content slot="content" title={title} description={description} next={next} prev={prev}>
+    <slot />
+  </Content>
+</Default>

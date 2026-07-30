@@ -1,0 +1,181 @@
+---
+import ScrollArea from "../ScrollArea.astro";
+
+export type SidebarItem = {
+  label: string;
+  path: string;
+  active?: boolean;
+};
+
+export type SidebarGroup = {
+  label: string;
+  items: SidebarItem[];
+};
+
+const { sidebar } = Astro.props;
+---
+
+<ScrollArea>
+  {sidebar.length > 0 && (
+    <aside class="sundrop-sidebar" aria-label="Sidebar navigation">
+      <nav class="sundrop-nav">
+        {sidebar.map((group: SidebarGroup) => (
+          <div class="sundrop-sidebar-group">
+            <button
+              class="sundrop-group-toggle"
+              aria-expanded="true"
+              data-group-toggle
+            >
+              <span class="sundrop-group-label">{group.label}</span>
+              <svg
+                class="sundrop-chevron"
+                xmlns="http://www.w3.org/2000/svg"
+                width="12"
+                height="12"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                aria-hidden="true"
+              >
+                <path d="m6 9 6 6 6-6"/>
+              </svg>
+            </button>
+
+            <!-- Wrap the grid container around an inner wrapper -->
+            <div class="sundrop-sidebar-list-wrapper" data-open="true">
+              <ul class="sundrop-sidebar-list">
+                {group.items.map((item: SidebarItem) => (
+                  <li>
+                    <a
+                      href={item.path}
+                      class:list={['sundrop-sidebar-link', { active: item.active }]}
+                      aria-current={item.active ? 'page' : undefined}
+                    >
+                      <span class="sidebar-text">{item.label}</span>
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        ))}
+      </nav>
+    </aside>
+  )}
+</ScrollArea>
+
+<script>
+  // Astro runs this once on the client
+  document.querySelectorAll('[data-group-toggle]').forEach((btn) => {
+    const wrapper = btn.nextElementSibling as HTMLElement;
+
+    btn.addEventListener('click', () => {
+      const expanded = btn.getAttribute('aria-expanded') === 'true';
+      btn.setAttribute('aria-expanded', String(!expanded));
+      
+      if (wrapper) {
+        wrapper.dataset.open = String(!expanded);
+      }
+    });
+  });
+</script>
+
+<style>
+@layer sundrop-components {
+  .sundrop-sidebar {
+    width: 100%;
+    padding: var(--sundrop-scale-4);
+    box-sizing: border-box;
+    background-color: transparent;
+  }
+
+  .sundrop-nav {
+    display: flex;
+    flex-direction: column;
+    gap: var(--sundrop-scale-6);
+  }
+
+  /* Group header button */
+  .sundrop-group-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    background: none;
+    border: none;
+    padding: var(--sundrop-scale-1) 0;
+    cursor: pointer;
+    color: var(--sundrop-color-fg-muted);
+    gap: var(--sundrop-scale-2);
+  }
+
+  .sundrop-group-label {
+    font-size: var(--sundrop-size-small);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+
+  .sundrop-chevron {
+    flex-shrink: 0;
+    transition: transform 0.2s ease;
+  }
+
+  [data-group-toggle][aria-expanded="false"] .sundrop-chevron {
+    transform: rotate(-90deg);
+  }
+
+  /* The Grid Collapse Container */
+  .sundrop-sidebar-list-wrapper {
+    display: grid;
+    grid-template-rows: 1fr;
+    transition: grid-template-rows 0.2s ease;
+    overflow: hidden;
+  }
+
+  .sundrop-sidebar-list-wrapper[data-open="false"] {
+    grid-template-rows: 0fr;
+  }
+
+  /* The actual list stays inside the min-height element */
+  .sundrop-sidebar-list {
+    min-height: 0;
+    list-style: none;
+    padding: 0;
+    /* Move margin/padding down here so it collapses smoothly without jumping */
+    margin: var(--sundrop-scale-2) 0 0 0;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  /* Links */
+  .sundrop-sidebar-link {
+    display: block;
+    padding: var(--sundrop-scale-1) var(--sundrop-scale-3);
+    border-radius: 6px;
+    border-left: 2px solid transparent;
+    text-decoration: none;
+    font-size: var(--sundrop-size-body);
+    color: var(--sundrop-color-fg-muted);
+    transition: color 0.15s ease, background-color 0.15s ease, border-color 0.15s ease;
+    line-height: 1.5;
+  }
+
+  .sundrop-sidebar-link:hover {
+    color: var(--sundrop-color-fg-default);
+    background-color: var(--sundrop-color-border-default);
+    text-decoration: none;
+  }
+
+  .sundrop-sidebar-link.active {
+    font-weight: 500;
+    color: var(--sundrop-color-fg-accent);
+    border-left-color: var(--sundrop-color-fg-accent-cool);
+    background-color: var(--sundrop-color-surface-cool);
+  }
+}
+</style>

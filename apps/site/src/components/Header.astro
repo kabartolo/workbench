@@ -1,0 +1,69 @@
+---
+// src/components/Header.astro
+---
+
+<header class="sundrop-header">
+  <div class="sundrop-header-brand">
+    <a href="/">Kate Bartolo</a>
+  </div>
+  <div class="sundrop-header-actions">
+    <button id="theme-toggle" class="sundrop-theme-toggle" aria-label="Toggle dark mode" type="button">
+      <span class="sundrop-theme-icon" aria-hidden="true">🌓</span>
+    </button>
+  </div>
+</header>
+
+<script>
+  // Runs cleanly on the client side
+  const toggleBtn = document.getElementById('theme-toggle');
+  
+  toggleBtn?.addEventListener('click', () => {
+    const currentTheme = document.documentElement.getAttribute('data-theme');
+    const nextTheme = currentTheme === 'dark' ? 'light' : 'dark';
+    
+    document.documentElement.setAttribute('data-theme', nextTheme);
+    localStorage.setItem('sundrop-theme', nextTheme);
+  });
+</script>
+
+<style>
+@layer sundrop-widgets {
+  .sundrop-header {
+    display: flex;
+	position: -webkit-sticky;
+	position: sticky;
+	top: 0;
+	z-index: 1000; 
+	justify-content: space-between;
+    align-items: center;
+    height: 64px;
+    padding: 0 var(--sundrop-scale-5);
+    border-bottom: 1px solid var(--sundrop-color-border-default);
+    background-color: var(--sundrop-color-canvas-default);
+    box-sizing: border-box;
+  }
+
+  .sundrop-header-brand a {
+    font-weight: 700;
+    font-size: var(--sundrop-size-h2);
+    text-decoration: none;
+    color: var(--sundrop-color-fg-default);
+  }
+  
+  .sundrop-theme-toggle {
+    background: transparent;
+    border: 1px solid var(--sundrop-color-border-default);
+    padding: var(--sundrop-scale-2);
+    border-radius: var(--sundrop-radius-component, 6px);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .sundrop-theme-toggle:hover {
+    background-color: var(--sundrop-color-canvas-subtle);
+    border-color: var(--sundrop-color-fg-accent);
+  }
+}
+</style>

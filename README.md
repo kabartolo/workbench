@@ -1,7 +1,5 @@
 # Workbench
 
-A collection of developer platform tools, plus my personal website.
+A monorepo of developer platform tools and the personal site that uses them.
 
-**Packages**: See /packages for npm packages.
-
-**Field Notes & Essays**: Visit katebartolo.dev to read the deep-dive mechanics and Slow Code breakdowns behind these utilities.
+This is a place to explore the deep connection between content strategy, information architecture, and platform engineering. Making docs look easy is the point — it's invisible when it works.
