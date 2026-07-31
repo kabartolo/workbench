@@ -1,0 +1,34 @@
+---
+import { getCollection } from 'astro:content';
+import Docs from '../../../../layouts/Docs.astro';
+import { compile, run } from '@mdx-js/mdx';
+import * as runtime from 'react/jsx-runtime';
+import type { MDXContent } from 'mdx/types';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('devToRehype');
+
+  return posts.map((post) => ({
+    params: { slug: post.data.slug },
+    props: { post },
+  }));
+}
+
+async function compileMdx(content: string): Promise<MDXContent> {
+  const compiled = String(await compile(content, { outputFormat: 'function-body' }));
+  const { default: MDXContent } = await run(compiled, {
+    ...runtime,
+    baseUrl: import.meta.url,
+  });
+  return MDXContent;
+}
+
+const { post } = Astro.props;
+const MDXContent = await compileMdx(post.data.markdown);
+---
+
+<Docs {...post.data}>
+   <p>This page just compiles the raw Markdown using @mdx-js/mdx instead of the Astro render() function.</p>
+   <p>No hydration yet!</p>
+  <MDXContent />
+</Docs>

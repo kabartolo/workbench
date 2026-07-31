@@ -1,0 +1,48 @@
+---
+import { getCollection, render } from 'astro:content';
+import Docs from '../../../../layouts/Docs.astro';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('devToRehype');
+
+  return posts.map((post) => ({
+    params: { slug: post.data.slug },
+    props: { post },
+  }));
+}
+
+const { post } = Astro.props;
+const { Content } = await render(post);
+---
+
+<Docs {...post.data}>
+    <p>On this page, we replace <code>data-component="code-block"</code> with a hydrated CodeBlock component.</p>
+    <ul>
+      <li>Rehype plugin adds data components globally, can't be scoped to a collection</li>
+      <li>Dev mode breaks due to Fast Refresh conflict</li>
+      <li>Flash before hydration</li>
+      <li>Astro components are server-only, so only JSX works</li>
+    </ul>
+    <details>
+    <summary>View rendered HTML</summary>
+    <pre>{post.rendered?.html}</pre>
+    </details>
+
+    Rendered article with code block replaced:
+
+  <Content />
+</Docs>
+
+<script>
+  import { createElement } from 'react';
+  import { createRoot } from 'react-dom/client';
+  import CodeBlock from '../../../../components/jsx/CodeBlock';
+
+  document.querySelectorAll('[data-component="code-block"]').forEach((node) => {
+    const code = node.querySelector('code')?.textContent ?? '';
+    const language = node.getAttribute('data-language') ?? undefined;
+
+    const root = createRoot(node);
+    root.render(createElement(CodeBlock, { code, language }));
+  });
+</script>

@@ -1,0 +1,10 @@
+---
+import Docs from "../../../../layouts/Docs.astro";
+import { getCollection } from 'astro:content';
+
+const pages = await getCollection('devToBaseline');
+---
+
+<Docs title="Baseline">
+    {pages.map((page) => <a href={`/lab/render-markdown/baseline/${page.data.slug}`}>{page.data.title}</a>)}
+</Docs>

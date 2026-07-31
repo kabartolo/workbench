@@ -1,0 +1,70 @@
+---
+import { getCollection } from 'astro:content';
+import Docs from '../../../../layouts/Docs.astro';
+import { compile, run } from '@mdx-js/mdx';
+import * as runtime from 'react/jsx-runtime';
+import { renderToString } from 'react-dom/server';
+import { createElement } from 'react';
+import type { MDXContent } from 'mdx/types';
+import CodeBlock from '../../../../components/jsx/CodeBlock';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('devToBaseline');
+
+  return posts.map((post) => ({
+    params: { slug: post.data.slug },
+    props: { post },
+  }));
+}
+
+async function compileMdx(content: string): Promise<MDXContent> {
+  const compiled = String(await compile(content, { outputFormat: 'function-body' }));
+  const { default: MDXContent } = await run(compiled, {
+    ...runtime,
+    baseUrl: import.meta.url,
+  });
+  return MDXContent;
+}
+
+function renderIsland(name: string, Component: any, props: any) {
+  const { children, ...serializableProps } = props;
+  const staticHtml = renderToString(createElement(Component, props));
+  return createElement('div', {
+    className: 'remote-island',
+    'data-component': name,
+    'data-props': JSON.stringify(serializableProps),
+    dangerouslySetInnerHTML: { __html: staticHtml },
+  });
+}
+
+const { post } = Astro.props;
+const MDXContent = await compileMdx(post.data.markdown);
+
+const pageComponents = {
+  pre: (props: any) => renderIsland('CodeBlock', CodeBlock, {
+    code: props.children?.props?.children ?? '',
+    language: props.children?.props?.className?.replace('language-', '') ?? '',
+  }),
+};
+---
+
+<Docs {...post.data}>
+  <p>Server-rendered components wrapped in hydration islands. Finally, no flash!</p>
+  <MDXContent components={pageComponents} />
+</Docs>
+
+<script>
+  import { createElement } from 'react';
+  import { hydrateRoot } from 'react-dom/client';
+  import CodeBlock from '../../../../components/jsx/CodeBlock';
+
+  const components: Record<string, any> = { CodeBlock };
+
+  document.querySelectorAll('.remote-island').forEach((node) => {
+    const name = node.getAttribute('data-component');
+    const props = JSON.parse(node.getAttribute('data-props') || '{}');
+    const Component = components[name!];
+    if (!Component) return;
+    hydrateRoot(node as HTMLElement, createElement(Component, props));
+  });
+</script>

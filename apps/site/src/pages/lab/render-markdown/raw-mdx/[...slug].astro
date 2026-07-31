@@ -1,0 +1,29 @@
+---
+import { getCollection, render } from 'astro:content';
+import Docs from '../../../../layouts/Docs.astro';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('devToRaw');
+
+  return posts.map((post) => ({
+    params: { slug: post.data.slug },
+    props: { post },
+  }));
+}
+
+const { post } = Astro.props;
+
+console.log(post)
+const { Content } = await render(post);
+---
+
+<Docs {...post.data}  >
+  <details>
+    <summary>Why is there no content?</summary>
+    <p>This entry was stored with raw Markdown in the schema but no <code>rendered</code> field. Astro's <code>render()</code> has nothing to process — there is no API to pass a raw string into the MDX pipeline at render time.</p>
+    <p>You have to either render the content or give the collection config a file path to the file. This this is remote content, we can't do that.</p>
+    <p>A potential solution is the copy this Markdown into a physical file in the content directory so Astro can resolve it normally.</p>
+    <pre>{post.data.markdown}</pre>
+  </details>
+  <Content />
+</Docs>

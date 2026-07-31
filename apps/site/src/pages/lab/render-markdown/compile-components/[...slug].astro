@@ -1,0 +1,36 @@
+---
+import { getCollection } from 'astro:content';
+import Docs from '../../../../layouts/Docs.astro';
+import { compile, run } from '@mdx-js/mdx';
+import * as runtime from 'react/jsx-runtime';
+import type { MDXContent } from 'mdx/types';
+import PreWrapper from './PreWrapper';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('devToRehype');
+
+  return posts.map((post) => ({
+    params: { slug: post.data.slug },
+    props: { post },
+  }));
+}
+
+async function compileMdx(content: string): Promise<MDXContent> {
+  const compiled = String(await compile(content, { outputFormat: 'function-body' }));
+  const { default: MDXContent } = await run(compiled, {
+    ...runtime,
+    baseUrl: import.meta.url,
+  });
+  return MDXContent;
+}
+
+const { post } = Astro.props;
+const MDXContent = await compileMdx(post.data.markdown);
+---
+
+<Docs {...post.data}>
+  <p>This is raw MDX compiled at runtime with a CodeBlock component passed manually.</p>
+  <p>No hydration, so the Copy button is not interactive.</p>
+  <p>We could stop here if we didn't need interactive components!</p>
+  <MDXContent components={{ pre: PreWrapper }} />
+</Docs>
