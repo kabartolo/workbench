@@ -1,5 +1,6 @@
 ---
 // src/components/Header.astro
+import { Icon } from './jsx/Icon.jsx';
 ---
 
 <header class="sundrop-header">
@@ -8,19 +9,18 @@
   </div>
   <div class="sundrop-header-actions">
     <button id="theme-toggle" class="sundrop-theme-toggle" aria-label="Toggle dark mode" type="button">
-      <span class="sundrop-theme-icon" aria-hidden="true">🌓</span>
+      <span class="theme-icon-light"><Icon name="lucide:sun" size="1rem" /></span>
+      <span class="theme-icon-dark"><Icon name="lucide:moon" size="1rem" /></span>
     </button>
   </div>
 </header>
 
 <script>
-  // Runs cleanly on the client side
   const toggleBtn = document.getElementById('theme-toggle');
-  
+
   toggleBtn?.addEventListener('click', () => {
     const currentTheme = document.documentElement.getAttribute('data-theme');
     const nextTheme = currentTheme === 'dark' ? 'light' : 'dark';
-    
     document.documentElement.setAttribute('data-theme', nextTheme);
     localStorage.setItem('sundrop-theme', nextTheme);
   });
@@ -30,11 +30,11 @@
 @layer sundrop-widgets {
   .sundrop-header {
     display: flex;
-	position: -webkit-sticky;
-	position: sticky;
-	top: 0;
-	z-index: 1000; 
-	justify-content: space-between;
+    position: -webkit-sticky;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    justify-content: space-between;
     align-items: center;
     height: 64px;
     padding: 0 var(--sundrop-scale-5);
@@ -49,21 +49,26 @@
     text-decoration: none;
     color: var(--sundrop-color-fg-default);
   }
-  
+
   .sundrop-theme-toggle {
     background: transparent;
     border: 1px solid var(--sundrop-color-border-default);
-    padding: var(--sundrop-scale-2);
+    padding: var(--sundrop-scale-1) var(--sundrop-scale-2);
     border-radius: var(--sundrop-radius-component, 6px);
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
+    color: var(--sundrop-color-fg-muted);
   }
 
   .sundrop-theme-toggle:hover {
     background-color: var(--sundrop-color-canvas-subtle);
     border-color: var(--sundrop-color-fg-accent);
   }
+
+  /* Light mode: show sun, hide moon */
+  :root[data-theme="light"] .theme-icon-dark { display: none; }
+  :root[data-theme="dark"] .theme-icon-light { display: none; }
 }
 </style>

@@ -1,0 +1,41 @@
+---
+// src/components/Sidebar/SidebarHeaderItem.astro
+import { Icon } from '../jsx/Icon.jsx';
+
+export interface Props {
+  icon?: string;
+  iconInternal?: boolean;
+  label?: string;
+}
+
+const { icon, iconInternal = false, label } = Astro.props;
+---
+
+<div
+  class="sundrop-sidebar-header-item"
+  data-has-icon={icon ? 'true' : 'false'}
+  data-icon-internal={iconInternal ? 'true' : 'false'}
+>
+  {icon && (
+    <span class="item-icon" aria-hidden="true" title={label}>
+      <Icon name={icon} />
+    </span>
+  )}
+  <div class="item-content sidebar-text">
+    <slot />
+  </div>
+</div>
+
+<style>
+@layer sundrop-components {
+  .sundrop-sidebar-header-item {
+    display: flex;
+    align-items: center;
+    gap: var(--sundrop-scale-2);
+    width: 100%;
+    height: 100%;
+    box-sizing: border-box;
+  }
+
+}
+</style>

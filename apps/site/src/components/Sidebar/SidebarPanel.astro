@@ -39,12 +39,26 @@ const { collapseMode = 'hidden', class: className = '' } = Astro.props;
     overflow: hidden;
   }
 
-  /* Target only the typography blocks and toggles, keeping lists active */
   .sundrop-sidebar-panel[data-collapse-mode="icons"][data-collapsed="true"] :global(.sidebar-text),
   .sundrop-sidebar-panel[data-collapse-mode="icons"][data-collapsed="true"] :global(.brand-title),
   .sundrop-sidebar-panel[data-collapse-mode="icons"][data-collapsed="true"] :global(.sundrop-group-label),
   .sundrop-sidebar-panel[data-collapse-mode="icons"][data-collapsed="true"] :global(.sundrop-chevron) {
     display: none !important;
   }
+
+  .sundrop-sidebar-panel[data-collapse-mode="icons"][data-collapsed="true"] :global(.sundrop-sidebar-header-item[data-has-icon="false"]:not([data-icon-internal="true"])),
+  .sundrop-sidebar-panel[data-collapse-mode="icons"][data-collapsed="true"] :global(.sundrop-sidebar-header-item[data-icon-internal="true"]) {
+    display: none;
+  }
+
+  .sundrop-sidebar-panel[data-collapse-mode="icons"][data-collapsed="true"] :global(.sundrop-sidebar-header-item[data-has-icon="true"]) {
+    justify-content: center;
+  }
+
+  .sundrop-sidebar-panel[data-collapse-mode="hidden"][data-collapsed="true"] {
+    display: none;
+  }
+
+  
 }
 </style>

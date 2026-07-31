@@ -1,7 +1,9 @@
 ---
 import Header from "../components/Header.astro";
-import "../styles/global.css";
-import DefaultSidebarHeader from "../components/Sidebar/SidebarHeader.astro";
+import Footer from "../components/Footer.astro";
+import BaseHead from "../components/BaseHead.astro";
+import SidebarHeader from "../components/Sidebar/SidebarHeader.astro";
+import DefaultSidebarHeader from "../components/Sidebar/DefaultSidebarHeader.astro";
 import DefaultSidebarFooter from "../components/Sidebar/SidebarFooter.astro";
 import SidebarPanel from "../components/Sidebar/SidebarPanel.astro";
 import SidebarPanelToggle from "../components/Sidebar/SidebarPanelToggle.astro";
@@ -12,43 +14,26 @@ export interface Props {
   sidebarCollapseMode?: 'hidden' | 'icons';
 }
 
-const { title, description, sidebarCollapseMode = 'hidden' } = Astro.props;
+const { title, description = '', sidebarCollapseMode = 'hidden' } = Astro.props;
 ---
 
 <html lang="en" data-theme="light">
 <head>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta charset="utf-8" />
-  <title>{title}</title>
-  {description && <meta name="description" content={description} />}
-  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Google+Sans:ital,opsz,wght@0,17..18,400..700;1,17..18,400..700&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
-
-  <script is:inline>
-    const savedTheme = localStorage.getItem('sundrop-theme');
-    if (savedTheme) {
-      document.documentElement.setAttribute('data-theme', savedTheme);
-    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
-      document.documentElement.setAttribute('data-theme', 'dark');
-    } else {
-      document.documentElement.setAttribute('data-theme', 'light');
-    }
-  </script>
+  <BaseHead title={title} description={description} />
 </head>
 <body>
   <Header />
 
-  <div class="sundrop-shell">
+  <div class="sundrop-shell" data-collapse-mode={sidebarCollapseMode}>
   <SidebarPanel class="panel-left" collapseMode={sidebarCollapseMode}>
     <div class="panel-left-header">
+      <SidebarHeader>
       {Astro.slots.has('sidebar-header') ? (
         <slot name="sidebar-header" />
       ) : (
         <DefaultSidebarHeader />
       )}
+      </SidebarHeader>
     </div>
 
     <div class="panel-left-main">
@@ -75,6 +60,8 @@ const { title, description, sidebarCollapseMode = 'hidden' } = Astro.props;
       <slot name="right-sidebar" />
     </aside>
   </div>
+
+  <Footer />
 </body>
 </html>
 
@@ -93,6 +80,7 @@ const { title, description, sidebarCollapseMode = 'hidden' } = Astro.props;
     min-height: 100vh;
     width: 100%;
     transition: grid-template-columns 0.2s ease;
+    align-items: start;
   }
 
   .sundrop-shell[data-sidebar-collapsed="true"] {
@@ -107,14 +95,19 @@ const { title, description, sidebarCollapseMode = 'hidden' } = Astro.props;
 
   .docs-topbar {
     display: flex;
+    position: fixed;
+    top: 64px;
     align-items: center;
-    padding: var(--sundrop-scale-2) 0;
-    margin-bottom: var(--sundrop-scale-4);
+    padding: var(--sundrop-scale-3) 0;
+    height: 56px;
+    box-sizing: border-box;
   }
-  
+
   :global(.panel-left) {
     grid-column: 1;
     max-width: 280px;
+    position: sticky;
+    top: 64px;
     height: calc(100vh - 64px);
     overflow: hidden;
     background-color: var(--sundrop-color-canvas-subtle);
@@ -150,6 +143,10 @@ const { title, description, sidebarCollapseMode = 'hidden' } = Astro.props;
     background-color: var(--sundrop-color-canvas-subtle);
     border-left: 1px solid var(--sundrop-color-border-default);
     padding: var(--sundrop-scale-4);
+  }
+
+  .sundrop-shell[data-sidebar-collapsed="true"][data-collapse-mode="hidden"] {
+    grid-template-columns: 0 1fr 280px;
   }
 
   @media (max-width: 1024px) {

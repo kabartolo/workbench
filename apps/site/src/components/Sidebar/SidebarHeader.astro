@@ -1,17 +1,8 @@
 ---
-export interface Props {
-  logo?: string;
-  title?: string;
-}
-
-const { logo = '◇', title = 'Documentation' } = Astro.props;
+// src/components/Sidebar/SidebarHeader.astro
 ---
 
 <div class="sundrop-sidebar-header">
-  <div class="header-brand">
-    <span class="brand-logo" aria-hidden="true">{logo}</span>
-    <span class="brand-title sidebar-text">{title}</span>
-  </div>
   <slot />
 </div>
 
@@ -26,20 +17,7 @@ const { logo = '◇', title = 'Documentation' } = Astro.props;
     flex-shrink: 0;
     min-height: 3.5rem;
     box-sizing: border-box;
-  }
-
-  .header-brand {
-    display: flex;
-    align-items: center;
-    gap: var(--sundrop-scale-2);
-    font-weight: 600;
-    font-size: var(--sundrop-size-body);
-    color: var(--sundrop-color-fg-default);
-  }
-
-  .brand-logo {
-    font-size: var(--sundrop-size-h5);
-    line-height: 1;
+    overflow: hidden;
   }
 }
 </style>
