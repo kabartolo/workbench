@@ -26,6 +26,29 @@
     font-weight: 500;
   }
 
+  .sundrop-body .icon-link::before {
+    content: '#';
+    font-size: 0.85em;
+    color: var(--sundrop-color-fg-muted);
+  }
+
+  .sundrop-body :is(h2, h3, h4) a[href^='#'] {
+    opacity: 0;
+    margin-right: 0.4em;
+    text-decoration: none;
+    transition: opacity 0.15s ease;
+    margin-left: -1.25em;
+    padding-right: 0.25em;
+  }
+
+  .sundrop-body :is(h2, h3, h4):hover a[href^='#'] {
+    opacity: 1;
+  }
+
+  .sundrop-body :is(h1, h2, h3, h4, h5, h6) {
+    scroll-margin-top: 80px;
+  }
+
   :where(.sundrop-body h1) {
     font-size: var(--sundrop-size-h1);
     line-height: 1.2;

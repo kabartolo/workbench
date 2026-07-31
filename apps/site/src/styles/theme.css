@@ -84,7 +84,7 @@
     /* Accents & Highlights (Luminous contrast against near-black) */
     --sundrop-color-fg-accent: #a5b4fc; /* Slightly brightened Periwinkle for readability */
     --sundrop-color-fg-accent-warm: #fde047;
-    --sundrop-color-fg-accent-cool: #38bdf8; /* Vibrant, clear Blue-Green/Sky for glowing links */
+    --sundrop-color-fg-accent-cool: #a5b4fc;
 
     /* Surfaces & Badges */
     --sundrop-color-surface-warm: #2e250a;
