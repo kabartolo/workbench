@@ -25,10 +25,12 @@ Scopes reflect package names. This list will be updated as packages are added.
 
 ### Examples
 
-- `feat(astro-api-mock): support mock delay options`
-- `docs(astro-loader-openapi): add TypeScript usage example`
+- `feat(package-name): support mock delay options`
+- `docs(site): add TypeScript usage example`
 
 ### Creating a Changeset
+
+> At this time, packages/ does not contain any public packages and this folder is for local development only.
 
 If your pull request modifies code in a package under `/packages` that is published to npm, please run:
 

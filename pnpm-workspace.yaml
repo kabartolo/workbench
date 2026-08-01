@@ -1,0 +1,10 @@
+packages:
+  - 'packages/**'
+  - 'apps/**'
+allowBuilds:
+  '@parcel/watcher': false
+  esbuild: true
+  pg: set this to true or false
+  sharp: true
+minimumReleaseAgeExclude:
+  - astro-mdx-remote@0.1.1 || 0.1.2 || 0.1.3
