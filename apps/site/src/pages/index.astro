@@ -1,0 +1,27 @@
+---
+import Docs from '../layouts/Docs.astro';
+import LandingHero from '../components/LandingHero.astro';
+import CardGrid from '../components/CardGrid.astro';
+import Card from '../components/Card.astro';
+---
+
+<Docs title="">
+	<LandingHero
+		title="DX Lab"
+		description="I build tools and plugins that optimize the developer and writer experience. 
+		DX Lab is where I open-source my solutions and document my processes."
+		buttons={[
+			{ label: 'Read the blog', href: '/blog', variant: 'primary' },
+			{ label: 'View tools', href: '/tools/docs', variant: 'secondary' },
+		]}
+	/>
+	<CardGrid title="Recent Posts">
+		<Card
+			title="How I built astro-mdx-remote"
+			description="Fetching and rendering remote MDX with full component support."
+			href="/blog/astro-mdx-remote"
+			image="/images/post-cover.jpg"
+			imageAlt="Post cover"
+		/>
+	</CardGrid>
+</Docs>

@@ -11,7 +11,7 @@
     --sundrop-font-mono: 'Space Mono', ui-monospace, monospace;
 
     --sundrop-size-small: 0.75rem;
-    --sundrop-size-body: 0.875rem;
+    --sundrop-size-body: 1rem;
     --sundrop-size-h6: 0.875rem;
     --sundrop-size-h5: 1rem;
     --sundrop-size-h4: 1.125rem;
@@ -84,7 +84,7 @@
     /* Accents & Highlights (Luminous contrast against near-black) */
     --sundrop-color-fg-accent: #a5b4fc; /* Slightly brightened Periwinkle for readability */
     --sundrop-color-fg-accent-warm: #fde047;
-    --sundrop-color-fg-accent-cool: #a5b4fc;
+    --sundrop-color-fg-accent-cool: #f8fafc;
 
     /* Surfaces & Badges */
     --sundrop-color-surface-warm: #2e250a;

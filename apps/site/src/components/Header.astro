@@ -1,11 +1,19 @@
 ---
 // src/components/Header.astro
 import { Icon } from './jsx/Icon.jsx';
+import { SITE_TITLE, NAV } from '../consts.js';
+import HeaderLink from './HeaderLink.astro';
 ---
 
 <header class="sundrop-header">
-  <div class="sundrop-header-brand">
-    <a href="/">Kate Bartolo</a>
+  <div class="sundrop-header-left">
+    <a href="/" class="sundrop-header-brand">{SITE_TITLE}</a>
+
+    <div class="sundrop-header-nav">
+      {NAV.length > 0 && NAV.map((item) => (
+        <HeaderLink href={item.link}>{item.label}</HeaderLink>
+      ))}
+    </div>
   </div>
   <div class="sundrop-header-actions">
     <button id="theme-toggle" class="sundrop-theme-toggle" aria-label="Toggle dark mode" type="button">
@@ -43,9 +51,21 @@ import { Icon } from './jsx/Icon.jsx';
     box-sizing: border-box;
   }
 
-  .sundrop-header-brand a {
-    font-weight: 700;
-    font-size: var(--sundrop-size-h2);
+  .sundrop-header-left {
+    display: flex;
+    align-items: center;
+    gap: var(--sundrop-scale-5);
+  }
+
+  .sundrop-header-nav {
+    display: flex;
+    align-items: center;
+    gap: var(--sundrop-scale-3);
+  }
+
+  .sundrop-header-brand {
+    font-weight: normal;
+    font-size: var(--sundrop-size-h4);
     text-decoration: none;
     color: var(--sundrop-color-fg-default);
   }

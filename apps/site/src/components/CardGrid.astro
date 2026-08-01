@@ -1,0 +1,36 @@
+---
+// src/components/CardGrid.astro
+interface Props {
+  title?: string;
+}
+
+const { title } = Astro.props;
+---
+
+<section class="sundrop-card-grid-section">
+  {title && <h2 class="card-grid-title">{title}</h2>}
+  <div class="sundrop-card-grid">
+    <slot />
+  </div>
+</section>
+
+<style>
+@layer sundrop-components {
+  .sundrop-card-grid-section {
+    margin-bottom: var(--sundrop-space-2xl);
+  }
+
+  .card-grid-title {
+    font-size: var(--sundrop-size-h4);
+    font-weight: 600;
+    color: var(--sundrop-color-fg-default);
+    margin: 0 0 var(--sundrop-scale-4) 0;
+  }
+
+  .sundrop-card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: var(--sundrop-scale-4);
+  }
+}
+</style>
