@@ -2,7 +2,7 @@
 import Default from './Default.astro';
 import Sidebar from "../components/Sidebar/Sidebar.astro";
 import Content from "../components/Content.astro";
-import type { SidebarGroup } from "../components/Sidebar/Sidebar.astro";
+import type { SidebarEntry } from "../components/Sidebar/Sidebar.astro";
 import type { MarkdownHeading } from 'astro';
 import TableOfContents from "../components/TableOfContents.astro";
 
@@ -11,7 +11,7 @@ export type PageRef = { label: string; path: string; };
 export interface Props {
   title: string;
   description?: string;
-  sidebar?: SidebarGroup[];
+  sidebar?: SidebarEntry[];
   prev?: PageRef;
   next?: PageRef;
   headings?: MarkdownHeading[];

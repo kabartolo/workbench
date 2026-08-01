@@ -2,9 +2,15 @@
 import { getCollection } from 'astro:content';
 import BlogPost from '../../layouts/BlogPost.astro';
 const posts = await getCollection('devToRehype');
+
+const sidebar = [{
+  label: 'DEV.to Blog',
+  path: '/blog',
+}];
+
 ---
 
-<BlogPost title="DEV.to Blog">
+<BlogPost title="DEV.to Blog" sidebar={sidebar}>
 <ul>
   {posts.map((post) => (
     <li>

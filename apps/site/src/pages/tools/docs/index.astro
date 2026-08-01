@@ -1,0 +1,22 @@
+---
+import { getCollection } from 'astro:content';
+import Docs from '../../../layouts/Docs.astro';
+const docs = await getCollection('docs');
+
+const sidebar = [{
+  label: 'Docs',
+  path: '/tools/docs',
+}];
+
+---
+
+<Docs title="Docs" sidebar={sidebar}>
+<ul>
+  {docs.map((doc) => (
+    <li>
+      <a href={`/tools/docs/${doc.id}`}>{doc.data.title}</a>
+      <p>{doc.data.description}</p>
+    </li>
+  ))}
+</ul>
+</Docs>

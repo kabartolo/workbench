@@ -1,0 +1,59 @@
+---
+import { type CollectionEntry, getCollection, render } from 'astro:content';
+import type { SidebarEntry } from '../../../components/Sidebar/Sidebar.astro';
+import Docs from '../../../layouts/Docs.astro';
+
+// const docs = await getCollection('docs');
+export async function getStaticPaths() {
+	const docs = await getCollection('docs');
+	return docs.map((doc) => ({
+		params: { slug: doc.id },
+		props: doc,
+	}));
+}
+type Props = CollectionEntry<'docs'>;
+
+const sidebar = [] as SidebarEntry[];
+// const sidebar = [
+//   {
+//     label: 'Getting Started',
+//     items: [
+//       { label: 'Introduction', path: '/docs/introduction' },
+//       { label: 'Installation', path: '/docs/installation' },
+//       { label: 'Quick Start', path: '/docs/quick-start', active: true },
+//     ],
+//   },
+//   {
+//     label: 'Components',
+//     items: [
+//       { label: 'Button', path: '/docs/components/button' },
+//       { label: 'Card', path: '/docs/components/card' },
+//       { label: 'Dialog', path: '/docs/components/dialog' },
+//       { label: 'Sidebar', path: '/docs/components/sidebar' },
+//     ],
+//   },
+//   {
+//     label: 'Theming',
+//     items: [
+//       { label: 'Design Tokens', path: '/docs/theming/tokens' },
+//       { label: 'Dark Mode', path: '/docs/theming/dark-mode' },
+//       { label: 'Custom Themes', path: '/docs/theming/custom' },
+//     ],
+//   },
+//   {
+//     label: 'API Reference',
+//     items: [
+//       { label: 'Configuration', path: '/docs/api/config' },
+//       { label: 'Hooks', path: '/docs/api/hooks' },
+//       { label: 'Utilities', path: '/docs/api/utilities' },
+//     ],
+//   },
+// ];
+
+const post = Astro.props;
+const { Content, headings } = await render(post);
+---
+
+<Docs {...post.data} sidebar={sidebar} headings={headings} >
+	<Content />
+</Docs>

@@ -1,8 +1,9 @@
 ---
 // src/components/Sidebar/DefaultSidebarHeader.astro
 import SidebarHeaderItem from './SidebarHeaderItem.astro';
+const label = Astro.url.pathname.startsWith('/tools') ? "Tools & Docs" : "Blog";
 ---
 
   <SidebarHeaderItem icon="lucide:quote" label="Home">
-    <span class="brand-title">Blog</span>
+    <span class="brand-title">{label}</span>
   </SidebarHeaderItem>

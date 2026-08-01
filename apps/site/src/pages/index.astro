@@ -3,6 +3,10 @@ import Docs from '../layouts/Docs.astro';
 import LandingHero from '../components/LandingHero.astro';
 import CardGrid from '../components/CardGrid.astro';
 import Card from '../components/Card.astro';
+import { getCollection } from 'astro:content';
+
+const posts = await getCollection('devToRehype');
+
 ---
 
 <Docs title="">
@@ -16,12 +20,12 @@ import Card from '../components/Card.astro';
 		]}
 	/>
 	<CardGrid title="Recent Posts">
-		<Card
-			title="How I built astro-mdx-remote"
-			description="Fetching and rendering remote MDX with full component support."
-			href="/blog/astro-mdx-remote"
-			image="/images/post-cover.jpg"
-			imageAlt="Post cover"
-		/>
+		{posts.map((post) => (
+			<Card
+				title={post.data.title}
+				description={post.data.description}
+				href={post.data.slug}
+			/>
+		))}
 	</CardGrid>
 </Docs>

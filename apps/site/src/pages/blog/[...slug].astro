@@ -12,8 +12,6 @@ import { mdxParser } from 'astro-mdx-remote';
 // Ensure dev.to only fetched at build time (static collection)
 export const prerender = true;
 
-const posts = await getCollection('devToRehype');
-
 export async function getStaticPaths() {
   const posts = await getCollection('devToRehype');
 
@@ -23,12 +21,10 @@ export async function getStaticPaths() {
   }));
 }
 
+// TODO: Create config options for multiple sidebars
 const sidebar = [{
-  label: 'DEV.to Posts',
-  items: posts.map((post) => ({
-    label: post.data.title,
-    path: post.data.slug,
-  })),
+  label: 'DEV.to Blog',
+  path: '/blog',
 }];
 
 async function compileMdx(content: string): Promise<MDXContent> {
