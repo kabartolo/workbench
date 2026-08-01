@@ -1,0 +1,42 @@
+---
+import  MDXRenderer from '../../../src/components/MDXRenderer.astro';
+import { mdxParser } from '../../../src/parser.js';
+
+// To run this test: npx astro dev --root ./test-site
+
+const rawContent = `---
+title: Astro Remote MDX Test
+---
+
+<Callout type="warning" title="Heads up">
+  This wraps **nested** content including a counter: <Counter />
+</Callout>
+
+<PropTable
+  title="MyComponent"
+  rows={[
+    { name: 'title', type: 'string', required: true },
+    { name: 'items', type: 'string[]', required: false },
+  ]}
+  meta={{ version: '2.1.0', deprecated: false }}
+/>
+
+<CodeBlock lang="ts" code={'const greet = (name: string): string => \`Hello, \${name}!\`;'} />
+
+<LazyChart dataUrl="/fake-url" />
+`;
+
+const { frontmatter, content } = mdxParser(rawContent);
+---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{frontmatter.title}</title>
+</head>
+<body>
+<h1>{frontmatter.title}</h1>
+<MDXRenderer content={content} />
+</body>
+</html>
