@@ -5,14 +5,23 @@ import sitemap from '@astrojs/sitemap';
 import { defineConfig } from 'astro/config';
 import icon from 'astro-icon';
 import rehypeComponentMarkers from './src/plugins/rehype-component-markers.js';
+import astroRemoteMdx from 'astro-mdx-remote';
 
 import react from '@astrojs/react';
 
 // https://astro.build/config
 export default defineConfig({
-  site: 'https://example.com',
+  site: 'https://katebartolo.dev',
   // output: 'server',
-  integrations: [mdx(), sitemap(), icon(), react()],
+  integrations: [
+    mdx(),
+    sitemap(),
+    icon(),
+    react(),
+    astroRemoteMdx({
+      configFilePath: './src/mdx-components.js'
+    }),
+  ],
   markdown: {
     rehypePlugins: [rehypeComponentMarkers],
   },

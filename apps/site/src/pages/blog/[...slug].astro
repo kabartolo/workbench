@@ -3,13 +3,16 @@ import { getCollection } from 'astro:content';
 import BlogPost from '../../layouts/BlogPost.astro';
 import { compile, run } from '@mdx-js/mdx';
 import * as runtime from 'react/jsx-runtime';
-import { renderToString } from 'react-dom/server';
-import { createElement } from 'react';
+import MDXRenderer from 'astro-mdx-remote/components/MDXRenderer.astro';
 import type { MDXContent } from 'mdx/types';
 import rehypeSlug from 'rehype-slug';
 import rehypeAutolinkHeadings from 'rehype-autolink-headings';
+import { mdxParser } from 'astro-mdx-remote';
 
-import CodeBlock from '../../components/jsx/CodeBlock';
+// Ensure dev.to only fetched at build time (static collection)
+export const prerender = true;
+
+const posts = await getCollection('devToRehype');
 
 export async function getStaticPaths() {
   const posts = await getCollection('devToRehype');
@@ -19,6 +22,14 @@ export async function getStaticPaths() {
     props: { post },
   }));
 }
+
+const sidebar = [{
+  label: 'DEV.to Posts',
+  items: posts.map((post) => ({
+    label: post.data.title,
+    path: post.data.slug,
+  })),
+}];
 
 async function compileMdx(content: string): Promise<MDXContent> {
   const compiled = String(await compile(content, {
@@ -31,17 +42,6 @@ async function compileMdx(content: string): Promise<MDXContent> {
     baseUrl: import.meta.url,
   });
   return MDXContent;
-}
-
-function renderIsland(name: string, Component: any, props: any) {
-  const { children, ...serializableProps } = props;
-  const staticHtml = renderToString(createElement(Component, props));
-  return createElement('div', {
-    className: 'remote-island',
-    'data-component': name,
-    'data-props': JSON.stringify(serializableProps),
-    dangerouslySetInnerHTML: { __html: staticHtml },
-  });
 }
 
 function extractHeadings(markdown: string) {
@@ -59,32 +59,14 @@ function extractHeadings(markdown: string) {
 
 const { post } = Astro.props;
 const headings = extractHeadings(post.data.markdown);
-const MDXContent = await compileMdx(post.data.markdown);
 
-const pageComponents = {
-  pre: (props: any) => renderIsland('CodeBlock', CodeBlock, {
-    code: props.children?.props?.children ?? '',
-    language: props.children?.props?.className?.replace('language-', '') ?? '',
-  }),
-};
+const { frontmatter, content } = mdxParser(post.data.markdown);
+
+// Get the raw evaluated MDX function component
+const MDXContent = await compileMdx(content);
+
 ---
 
-<BlogPost {...post.data} headings={headings}>
-  <MDXContent components={pageComponents} />
+<BlogPost {...post.data} sidebar={sidebar} headings={headings}>
+  <MDXRenderer compiledContent={MDXContent} />
 </BlogPost>
-
-<script>
-  import { createElement } from 'react';
-  import { hydrateRoot } from 'react-dom/client';
-  import CodeBlock from '../../components/jsx/CodeBlock';
-
-  const components: Record<string, any> = { CodeBlock };
-
-  document.querySelectorAll('.remote-island').forEach((node) => {
-    const name = node.getAttribute('data-component');
-    const props = JSON.parse(node.getAttribute('data-props') || '{}');
-    const Component = components[name!];
-    if (!Component) return;
-    hydrateRoot(node as HTMLElement, createElement(Component, props));
-  });
-</script>

@@ -1,10 +1,10 @@
 ---
 import { getCollection } from 'astro:content';
-
+import BlogPost from '../../layouts/BlogPost.astro';
 const posts = await getCollection('devToRehype');
 ---
 
-<h1>DEV.to Posts</h1>
+<BlogPost title="DEV.to Blog">
 <ul>
   {posts.map((post) => (
     <li>
@@ -13,3 +13,4 @@ const posts = await getCollection('devToRehype');
     </li>
   ))}
 </ul>
+</BlogPost>
