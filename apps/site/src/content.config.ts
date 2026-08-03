@@ -6,6 +6,7 @@ import {
   devToLoaderBase,
   devToLoaderRehype,
   devToLoaderRawMdx,
+  packageDocsLoader,
 } from './markdown-loaders.js';
 
 const docs = defineCollection({
@@ -19,7 +20,25 @@ const docs = defineCollection({
     }),
 });
 
+const packageDocs = defineCollection({
+  loader: packageDocsLoader([
+    {
+      repo: 'kabartolo/astro-mdx-remote',
+      path: 'docs/api',
+    },
+  ]),
+  schema: () =>
+    z.object({
+      title: z.string(),
+      description: z.string(),
+      markdown: z.string(),
+      slug: z.string(),
+    }),
+});
+
 export const collections = {
+  packageDocs,
+  docs,
   devToBaseline: defineCollection({
     loader: devToLoaderBase('kabartolo'),
     schema: z.object({
@@ -54,5 +73,4 @@ export const collections = {
       html: z.string(),
     }),
   }),
-  docs,
 };

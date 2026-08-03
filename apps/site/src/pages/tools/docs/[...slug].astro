@@ -1,59 +1,69 @@
 ---
-import { type CollectionEntry, getCollection, render } from 'astro:content';
-import type { SidebarEntry } from '../../../components/Sidebar/Sidebar.astro';
+import { getCollection } from 'astro:content';
 import Docs from '../../../layouts/Docs.astro';
+import { compile, run } from '@mdx-js/mdx';
+import * as runtime from 'react/jsx-runtime';
+import MDXRenderer from 'astro-mdx-remote/components/MDXRenderer.astro';
+import type { MDXContent } from 'mdx/types';
+import rehypeSlug from 'rehype-slug';
+import rehypeAutolinkHeadings from 'rehype-autolink-headings';
+import { mdxParser } from 'astro-mdx-remote';
 
-// const docs = await getCollection('docs');
+// Ensure dev.to only fetched at build time (static collection)
+export const prerender = true;
+
 export async function getStaticPaths() {
-	const docs = await getCollection('docs');
-	return docs.map((doc) => ({
-		params: { slug: doc.id },
-		props: doc,
-	}));
+  const posts = await getCollection('packageDocs');
+  console.log(posts)
+
+  return posts.map((post) => ({
+    params: { slug: post.data.slug },
+    props: { post },
+  }));
 }
-type Props = CollectionEntry<'docs'>;
 
-const sidebar = [] as SidebarEntry[];
-// const sidebar = [
-//   {
-//     label: 'Getting Started',
-//     items: [
-//       { label: 'Introduction', path: '/docs/introduction' },
-//       { label: 'Installation', path: '/docs/installation' },
-//       { label: 'Quick Start', path: '/docs/quick-start', active: true },
-//     ],
-//   },
-//   {
-//     label: 'Components',
-//     items: [
-//       { label: 'Button', path: '/docs/components/button' },
-//       { label: 'Card', path: '/docs/components/card' },
-//       { label: 'Dialog', path: '/docs/components/dialog' },
-//       { label: 'Sidebar', path: '/docs/components/sidebar' },
-//     ],
-//   },
-//   {
-//     label: 'Theming',
-//     items: [
-//       { label: 'Design Tokens', path: '/docs/theming/tokens' },
-//       { label: 'Dark Mode', path: '/docs/theming/dark-mode' },
-//       { label: 'Custom Themes', path: '/docs/theming/custom' },
-//     ],
-//   },
-//   {
-//     label: 'API Reference',
-//     items: [
-//       { label: 'Configuration', path: '/docs/api/config' },
-//       { label: 'Hooks', path: '/docs/api/hooks' },
-//       { label: 'Utilities', path: '/docs/api/utilities' },
-//     ],
-//   },
-// ];
+// TODO: Create config options for multiple sidebars
+const sidebar = [{
+  label: 'Docs',
+  path: '/tools/docs',
+}];
 
-const post = Astro.props;
-const { Content, headings } = await render(post);
+async function compileMdx(content: string): Promise<MDXContent> {
+  const compiled = String(await compile(content, {
+    outputFormat: 'function-body',
+    rehypePlugins: [rehypeSlug, 
+    [rehypeAutolinkHeadings, { behavior: 'prepend' }],],
+  }));
+  const { default: MDXContent } = await run(compiled, {
+    ...runtime,
+    baseUrl: import.meta.url,
+  });
+  return MDXContent;
+}
+
+function extractHeadings(markdown: string) {
+  const headings = [];
+  for (const line of markdown.split('\n')) {
+    const match = line.match(/^(#{2,3})\s+(.+)/);
+    if (match) {
+      const text = match[2].trim();
+      const slug = text.toLowerCase().replace(/[^\w\s-]/g, '').replace(/\s+/g, '-');
+      headings.push({ depth: match[1].length, slug, text });
+    }
+  }
+  return headings;
+}
+
+const { post } = Astro.props;
+const headings = extractHeadings(post.data.markdown);
+
+const { frontmatter, content } = mdxParser(post.data.markdown);
+
+// Get the raw evaluated MDX function component
+const MDXContent = await compileMdx(content);
+
 ---
 
-<Docs {...post.data} sidebar={sidebar} headings={headings} >
-	<Content />
+<Docs {...post.data} sidebar={sidebar} headings={headings}>
+  <MDXRenderer compiledContent={MDXContent} />
 </Docs>

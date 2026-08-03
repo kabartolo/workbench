@@ -1,22 +1,22 @@
 ---
-import { getCollection } from 'astro:content';
 import Docs from '../../../layouts/Docs.astro';
-const docs = await getCollection('docs');
-
-const sidebar = [{
-  label: 'Docs',
-  path: '/tools/docs',
-}];
+import LandingHero from '../../../components/LandingHero.astro';
+import CardGrid from '../../../components/CardGrid.astro';
+import Card from '../../../components/Card.astro';
 
 ---
 
-<Docs title="Docs" sidebar={sidebar}>
-<ul>
-  {docs.map((doc) => (
-    <li>
-      <a href={`/tools/docs/${doc.id}`}>{doc.data.title}</a>
-      <p>{doc.data.description}</p>
-    </li>
-  ))}
-</ul>
+<Docs title="">
+	<LandingHero
+		title="Astro Plugins & Tools"
+		description=""
+	/>
+
+	<CardGrid title="Astro Plugins">
+		<Card
+				title="astro-mdx-remote"
+				description="Render remote MDX content in Astro with server-rendered, interactive React islands."
+				href="/tools/docs/astro-mdx-remote"
+			/>
+	</CardGrid>
 </Docs>
