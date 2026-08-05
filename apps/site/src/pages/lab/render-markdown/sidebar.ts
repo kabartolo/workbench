@@ -4,7 +4,7 @@ export const sidebar = [
     items: [
       {
         label: 'The Baseline: Plain HTML Rendering',
-        path: '/lab/render-markdown/exp-0/rendering-remote-content#experiment-0-the-baseline-plain-html-rendering',
+        path: '/lab/render-markdown/exp-0/rendering-remote-content#the-baseline-plain-html-rendering',
       },
       {
         label: 'Experiment 1',
@@ -16,7 +16,7 @@ export const sidebar = [
       },
       {
         label: 'Experiment 3',
-        path: '/lab/render-markdown/exp-3/rendering-remote-content#experiment-3-server-render-hydration-islands',
+        path: '/lab/render-markdown/exp-3/rendering-remote-content#experiment-3-server-render--hydration-islands',
       },
     ],
   },
