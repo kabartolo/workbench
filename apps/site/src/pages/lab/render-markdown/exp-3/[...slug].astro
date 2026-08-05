@@ -7,9 +7,13 @@ import CodeBlock from '../../../../components/jsx/CodeBlock';
 import { extractHeadings } from '../../../../utils/headings';
 import BlogPost from '../../../../layouts/BlogPost.astro';
 import { compileMdx } from '../../../../utils/mdx';
-import type { ComponentType } from 'react';
+import type { ComponentType, ReactElement } from 'react';
 import { sidebar } from '../sidebar';
 
+interface CodeElementProps {
+  children?: string;
+  className?: string;
+}
 export async function getStaticPaths() {
   const posts = await getCollection('devToBaseline');
 
@@ -26,13 +30,14 @@ function renderIsland(name: string, Component: ComponentType<any>, props: Record
     className: 'remote-island',
     'data-component': name,
     'data-props': JSON.stringify(serializableProps),
+    // Make sure you trust the HTML source
     dangerouslySetInnerHTML: { __html: staticHtml },
   });
 }
 
 const pageComponents = {
   pre: (props: Record<string, unknown>) => {
-    const children = props.children as { props?: { children?: string; className?: string } } | undefined;
+    const children = props.children as ReactElement<CodeElementProps> | undefined;
     
     return renderIsland('CodeBlock', CodeBlock, {
       code: children?.props?.children ?? '',
@@ -62,7 +67,8 @@ const MDXContent = await compileMdx(post.data.markdown);
     const name = node.getAttribute('data-component');
     const props = JSON.parse(node.getAttribute('data-props') || '{}');
     const Component = components[name!];
-    if (!Component) return;
+    if (!name || !Component) return;
+
     hydrateRoot(node as HTMLElement, createElement(Component, props));
   });
 </script>
