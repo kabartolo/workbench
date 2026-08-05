@@ -4,10 +4,12 @@ import mdx from '@astrojs/mdx';
 import sitemap from '@astrojs/sitemap';
 import { defineConfig } from 'astro/config';
 import icon from 'astro-icon';
-import rehypeComponentMarkers from './src/plugins/rehype-component-markers.js';
 import astroRemoteMdx from 'astro-mdx-remote';
 import vercel from '@astrojs/vercel';
 import react from '@astrojs/react';
+import rehypeSlug from 'rehype-slug';
+import rehypeAutolinkHeadings from 'rehype-autolink-headings';
+import rehypeComponentMarkers from './src/plugins/rehype-component-markers.js';
 
 // https://astro.build/config
 export default defineConfig({
@@ -25,6 +27,10 @@ export default defineConfig({
     }),
   ],
   markdown: {
-    rehypePlugins: [rehypeComponentMarkers],
+    rehypePlugins: [
+      rehypeComponentMarkers,
+      rehypeSlug,
+      [rehypeAutolinkHeadings, { behavior: 'prepend' }],
+    ],
   },
 });

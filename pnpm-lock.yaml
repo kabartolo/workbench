@@ -248,6 +248,9 @@ importers:
       astro-mdx-remote:
         specifier: ^0.1.4
         version: 0.1.4(astro@7.1.3(@emnapi/core@2.0.0-alpha.3)(@emnapi/runtime@2.0.0-alpha.3)(@types/node@25.9.5)(@vercel/functions@3.7.6)(rollup@4.62.3)(yaml@2.9.0))(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
+      gray-matter:
+        specifier: ^4.0.3
+        version: 4.0.3
       highlight.js:
         specifier: ^11.11.1
         version: 11.11.1

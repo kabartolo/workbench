@@ -1,0 +1,59 @@
+.code-block-wrapper {
+  position: relative;
+  background-color: var(--sundrop-color-canvas-subtle);
+  color: var(--sundrop-color-fg-default);
+  border-radius: var(--sundrop-scale-2);
+  border: 1px solid var(--sundrop-color-border-default);
+  overflow: hidden;
+  margin: var(--sundrop-space-lg) 0;
+  font-family: var(--sundrop-font-mono);
+}
+
+.code-block-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--sundrop-space-sm) var(--sundrop-space-md);
+  background-color: var(--sundrop-color-surface-cool);
+  border-bottom: 1px solid var(--sundrop-color-border-default);
+  font-size: var(--sundrop-size-small);
+}
+
+.code-block-language {
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--sundrop-color-fg-muted);
+  font-weight: 600;
+}
+
+.code-block-copy-btn {
+  background-color: var(--sundrop-color-canvas-default);
+  color: var(--sundrop-color-fg-default);
+  border: 1px solid var(--sundrop-color-border-default);
+  border-radius: var(--sundrop-scale-1);
+  padding: var(--sundrop-scale-1) var(--sundrop-scale-3);
+  font-size: var(--sundrop-size-small);
+  cursor: pointer;
+  font-weight: 500;
+  transition: background-color 0.2s ease;
+}
+
+.code-block-copy-btn.copied {
+  background-color: var(--vt-pine-dark, #067a53);
+  color: #ffffff;
+}
+
+/* Forces the code section itself to always be dark */
+.code-block-pre {
+  margin: 0;
+  padding: var(--sundrop-space-md);
+  overflow-x: auto;
+  font-size: var(--sundrop-size-body);
+  line-height: 1.7;
+  background-color: #0d1117; /* Matches github-dark background */
+  color: #c9d1d9; /* Matches github-dark text */
+}
+
+.code-block-code {
+  font-family: inherit;
+}

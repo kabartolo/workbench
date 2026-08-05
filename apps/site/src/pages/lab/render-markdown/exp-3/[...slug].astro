@@ -1,12 +1,14 @@
 ---
 import { getCollection } from 'astro:content';
-import Docs from '../../../../layouts/Docs.astro';
-import { compile, run } from '@mdx-js/mdx';
-import * as runtime from 'react/jsx-runtime';
 import { renderToString } from 'react-dom/server';
 import { createElement } from 'react';
 import type { MDXContent } from 'mdx/types';
 import CodeBlock from '../../../../components/jsx/CodeBlock';
+import { extractHeadings } from '../../../../utils/headings';
+import BlogPost from '../../../../layouts/BlogPost.astro';
+import { compileMdx } from '../../../../utils/mdx';
+import type { ComponentType } from 'react';
+import { sidebar } from '../sidebar';
 
 export async function getStaticPaths() {
   const posts = await getCollection('devToBaseline');
@@ -17,16 +19,7 @@ export async function getStaticPaths() {
   }));
 }
 
-async function compileMdx(content: string): Promise<MDXContent> {
-  const compiled = String(await compile(content, { outputFormat: 'function-body' }));
-  const { default: MDXContent } = await run(compiled, {
-    ...runtime,
-    baseUrl: import.meta.url,
-  });
-  return MDXContent;
-}
-
-function renderIsland(name: string, Component: any, props: any) {
+function renderIsland(name: string, Component: ComponentType<any>, props: Record<string, unknown>) {
   const { children, ...serializableProps } = props;
   const staticHtml = renderToString(createElement(Component, props));
   return createElement('div', {
@@ -37,29 +30,34 @@ function renderIsland(name: string, Component: any, props: any) {
   });
 }
 
-const { post } = Astro.props;
-const MDXContent = await compileMdx(post.data.markdown);
-
 const pageComponents = {
-  pre: (props: any) => renderIsland('CodeBlock', CodeBlock, {
-    code: props.children?.props?.children ?? '',
-    language: props.children?.props?.className?.replace('language-', '') ?? '',
-  }),
+  pre: (props: Record<string, unknown>) => {
+    const children = props.children as { props?: { children?: string; className?: string } } | undefined;
+    
+    return renderIsland('CodeBlock', CodeBlock, {
+      code: children?.props?.children ?? '',
+      language: children?.props?.className?.replace('language-', '') ?? '',
+    });
+  }
 };
+
+const { post } = Astro.props;
+const headings = extractHeadings(post.data.markdown);
+const MDXContent = await compileMdx(post.data.markdown);
 ---
 
-<Docs {...post.data}>
-  <p>Server-rendered components wrapped in hydration islands. Finally, no flash!</p>
+<BlogPost {...post.data} headings={headings} sidebar={sidebar}>
   <MDXContent components={pageComponents} />
-</Docs>
+</BlogPost>
 
 <script>
   import { createElement } from 'react';
   import { hydrateRoot } from 'react-dom/client';
   import CodeBlock from '../../../../components/jsx/CodeBlock';
+  import type { ComponentType } from 'react';
 
-  const components: Record<string, any> = { CodeBlock };
-
+  const components: Record<string, ComponentType<any>> = { CodeBlock };
+    
   document.querySelectorAll('.remote-island').forEach((node) => {
     const name = node.getAttribute('data-component');
     const props = JSON.parse(node.getAttribute('data-props') || '{}');

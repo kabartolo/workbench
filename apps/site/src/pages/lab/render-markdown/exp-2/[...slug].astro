@@ -1,0 +1,26 @@
+---
+import { getCollection } from 'astro:content';
+import Docs from '../../../../layouts/Docs.astro';
+import type { MDXContent } from 'mdx/types';
+import PreWrapper from './PreWrapper';
+import { extractHeadings } from '../../../../utils/headings';
+import { compileMdx } from '../../../../utils/mdx';
+import { sidebar } from '../sidebar';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('devToBaseline');
+
+  return posts.map((post) => ({
+    params: { slug: post.data.slug },
+    props: { post },
+  }));
+}
+
+const { post } = Astro.props;
+const MDXContent = await compileMdx(post.data.markdown);
+const headings = extractHeadings(post.data.markdown);
+---
+
+<Docs {...post.data} headings={headings} sidebar={sidebar}>
+  <MDXContent components={{ pre: PreWrapper }} />
+</Docs>

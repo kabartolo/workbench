@@ -3,13 +3,24 @@ import Docs from '../../../layouts/Docs.astro';
 import LandingHero from '../../../components/LandingHero.astro';
 import CardGrid from '../../../components/CardGrid.astro';
 import Card from '../../../components/Card.astro';
+import { getCollection } from 'astro:content';
 
+const docs = await getCollection('packageDocs');
+const sidebar = [{
+  label: 'astro-mdx-remote',
+  items: [
+    { label: 'Overview', path: '/tools/docs/astro-mdx-remote' },
+    ...docs
+      .filter((post) => post.data.slug !== 'astro-mdx-remote')
+      .map((post) => ({ label: post.data.title, path: `/tools/docs/${post.data.slug}` }))
+  ]
+}];
 ---
 
-<Docs title="">
+<Docs title="" sidebar={sidebar}>
 	<LandingHero
-		title="Astro Plugins & Tools"
-		description=""
+		title="Astro Plugin & Tool Documentation"
+		description="Open source tools for the Astro ecosystem"
 	/>
 
 	<CardGrid title="Astro Plugins">

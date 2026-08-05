@@ -1,6 +1,8 @@
 ---
 import { getCollection, render } from 'astro:content';
 import Docs from '../../../../layouts/Docs.astro';
+import { extractHeadings } from '../../../../utils/headings';
+import { sidebar } from '../sidebar';
 
 export async function getStaticPaths() {
   const posts = await getCollection('devToRehype');
@@ -13,23 +15,10 @@ export async function getStaticPaths() {
 
 const { post } = Astro.props;
 const { Content } = await render(post);
+const headings = extractHeadings(post.data.markdown);
 ---
 
-<Docs {...post.data}>
-    <p>On this page, we replace <code>data-component="code-block"</code> with a hydrated CodeBlock component.</p>
-    <ul>
-      <li>Rehype plugin adds data components globally, can't be scoped to a collection</li>
-      <li>Dev mode breaks due to Fast Refresh conflict</li>
-      <li>Flash before hydration</li>
-      <li>Astro components are server-only, so only JSX works</li>
-    </ul>
-    <details>
-    <summary>View rendered HTML</summary>
-    <pre>{post.rendered?.html}</pre>
-    </details>
-
-    Rendered article with code block replaced:
-
+<Docs {...post.data} headings={headings} sidebar={sidebar}>
   <Content />
 </Docs>
 

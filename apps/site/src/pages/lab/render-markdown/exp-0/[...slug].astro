@@ -1,6 +1,8 @@
 ---
 import { getCollection, render } from 'astro:content';
 import Docs from '../../../../layouts/Docs.astro';
+import { extractHeadings } from '../../../../utils/headings';
+import { sidebar } from '../sidebar';
 
 export async function getStaticPaths() {
   const posts = await getCollection('devToBaseline');
@@ -12,10 +14,11 @@ export async function getStaticPaths() {
 }
 
 const { post } = Astro.props;
+const headings = extractHeadings(post.data.markdown);
 
 const { Content } = await render(post);
 ---
 
-<Docs {...post.data}  >
+<Docs {...post.data} headings={headings} sidebar={sidebar}>
   <Content />
 </Docs>

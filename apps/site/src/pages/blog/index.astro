@@ -1,12 +1,12 @@
 ---
 import { getCollection } from 'astro:content';
 import BlogPost from '../../layouts/BlogPost.astro';
-const posts = await getCollection('devToRehype');
 
-const sidebar = [{
-  label: 'DEV.to Blog',
-  path: '/blog',
-}];
+const posts = await getCollection('devToRehype');
+const sidebar = posts
+  .sort((a, b) => b.data.publishedAt.getTime() - a.data.publishedAt.getTime())
+  .map((post) => ({ label: post.data.title, path: `/blog/${post.data.slug}` }));
+
 
 ---
 

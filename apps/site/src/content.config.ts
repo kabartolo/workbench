@@ -2,12 +2,9 @@ import { defineCollection } from 'astro:content';
 import { glob } from 'astro/loaders';
 import { z } from 'astro/zod';
 
-import {
-  devToLoaderBase,
-  devToLoaderRehype,
-  devToLoaderRawMdx,
-  packageDocsLoader,
-} from './markdown-loaders.js';
+import { packageDocsLoader } from './github-loader.js';
+
+import { devToLoaderBase, devToLoaderRehype } from './markdown-loaders.js';
 
 const docs = defineCollection({
   // Load Markdown and MDX files in the `src/content/docs/` directory.
@@ -53,17 +50,6 @@ export const collections = {
 
   devToRehype: defineCollection({
     loader: devToLoaderRehype('kabartolo'),
-    schema: z.object({
-      title: z.string(),
-      slug: z.string(),
-      description: z.string(),
-      publishedAt: z.date(),
-      markdown: z.string(),
-      html: z.string(),
-    }),
-  }),
-  devToRaw: defineCollection({
-    loader: devToLoaderRawMdx('kabartolo'),
     schema: z.object({
       title: z.string(),
       slug: z.string(),

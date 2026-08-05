@@ -1,20 +1,17 @@
 ---
 import { getCollection } from 'astro:content';
 import Docs from '../../../layouts/Docs.astro';
-import { compile, run } from '@mdx-js/mdx';
-import * as runtime from 'react/jsx-runtime';
 import MDXRenderer from 'astro-mdx-remote/components/MDXRenderer.astro';
 import type { MDXContent } from 'mdx/types';
-import rehypeSlug from 'rehype-slug';
-import rehypeAutolinkHeadings from 'rehype-autolink-headings';
 import { mdxParser } from 'astro-mdx-remote';
+import { compileMdx } from '../../../utils/mdx';
+import { extractHeadings } from '../../../utils/headings';
 
 // Ensure dev.to only fetched at build time (static collection)
 export const prerender = true;
 
 export async function getStaticPaths() {
   const posts = await getCollection('packageDocs');
-  console.log(posts)
 
   return posts.map((post) => ({
     params: { slug: post.data.slug },
@@ -22,37 +19,17 @@ export async function getStaticPaths() {
   }));
 }
 
-// TODO: Create config options for multiple sidebars
+const docs = await getCollection('packageDocs');
 const sidebar = [{
-  label: 'Docs',
-  path: '/tools/docs',
+  label: 'astro-mdx-remote',
+  items: [
+    { label: 'Overview', path: '/tools/docs/astro-mdx-remote' },
+    ...docs
+      .filter((post) => post.data.slug !== 'astro-mdx-remote')
+      .map((post) => ({ label: post.data.title, path: `/tools/docs/${post.data.slug}` }))
+  ]
 }];
 
-async function compileMdx(content: string): Promise<MDXContent> {
-  const compiled = String(await compile(content, {
-    outputFormat: 'function-body',
-    rehypePlugins: [rehypeSlug, 
-    [rehypeAutolinkHeadings, { behavior: 'prepend' }],],
-  }));
-  const { default: MDXContent } = await run(compiled, {
-    ...runtime,
-    baseUrl: import.meta.url,
-  });
-  return MDXContent;
-}
-
-function extractHeadings(markdown: string) {
-  const headings = [];
-  for (const line of markdown.split('\n')) {
-    const match = line.match(/^(#{2,3})\s+(.+)/);
-    if (match) {
-      const text = match[2].trim();
-      const slug = text.toLowerCase().replace(/[^\w\s-]/g, '').replace(/\s+/g, '-');
-      headings.push({ depth: match[1].length, slug, text });
-    }
-  }
-  return headings;
-}
 
 const { post } = Astro.props;
 const headings = extractHeadings(post.data.markdown);

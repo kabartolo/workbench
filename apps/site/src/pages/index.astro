@@ -13,7 +13,8 @@ const posts = await getCollection('devToRehype');
 	<LandingHero
 		title="DX Lab"
 		description="I build tools and plugins that optimize the developer and writer experience. 
-		DX Lab is where I open-source my solutions and document my processes."
+		DX Lab is where I open-source my solutions and document my processes. This site is brand new.
+		Please check back for updates."
 		buttons={[
 			{ label: 'Read the blog', href: '/blog', variant: 'primary' },
 			{ label: 'View tools', href: '/tools/docs', variant: 'secondary' },
@@ -24,7 +25,7 @@ const posts = await getCollection('devToRehype');
 			<Card
 				title={post.data.title}
 				description={post.data.description}
-				href={post.data.slug}
+				href={`/blog/${post.data.slug}`}
 			/>
 		))}
 	</CardGrid>
