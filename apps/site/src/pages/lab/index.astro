@@ -1,0 +1,24 @@
+---
+import Docs from '../../layouts/Docs.astro';
+import LandingHero from '../../components/LandingHero.astro';
+import CardGrid from '../../components/CardGrid.astro';
+import Card from '../../components/Card.astro';
+import { sidebar } from './render-markdown/sidebar.ts';
+
+
+---
+
+<Docs title="" sidebar={sidebar}>
+	<LandingHero
+		title="Lab"
+		description="Experiments in progress. Currently: rendering remote MDX in Astro with React components and zero layout flash."
+	/>
+
+	<CardGrid title="">
+		<Card
+				title="Rendering Remote MDX"
+				description="Learning how to render remote Markdown or MDX with React components"
+				href="/lab/render-markdown/exp-0/rendering-remote-content"
+			/>
+	</CardGrid>
+</Docs>

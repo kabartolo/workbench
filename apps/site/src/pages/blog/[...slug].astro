@@ -11,7 +11,7 @@ import { extractHeadings } from '../../utils/headings';
 export const prerender = true;
 
 export async function getStaticPaths() {
-  const posts = await getCollection('devToRehype');
+  const posts = await getCollection('devTo');
 
   return posts.map((post) => ({
     params: { slug: post.data.slug },
@@ -19,7 +19,7 @@ export async function getStaticPaths() {
   }));
 }
 
-const posts = await getCollection('devToRehype');
+const posts = await getCollection('devTo');
 const sidebar = posts
   .sort((a, b) => b.data.publishedAt.getTime() - a.data.publishedAt.getTime())
   .map((post) => ({ label: post.data.title, path: `/blog/${post.data.slug}` }));

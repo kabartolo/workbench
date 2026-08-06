@@ -1,10 +1,10 @@
 export const sidebar = [
   {
-    label: 'Render Markdown',
+    label: 'Render Remote MDX',
     items: [
       {
         label: 'The Baseline: Plain HTML Rendering',
-        path: '/lab/render-markdown/exp-0/rendering-remote-content#the-baseline-plain-html-rendering',
+        path: '/lab/render-markdown/exp-0/rendering-remote-content',
       },
       {
         label: 'Experiment 1',

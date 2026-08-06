@@ -1,7 +1,10 @@
 ---
 // src/components/Sidebar/DefaultSidebarHeader.astro
 import SidebarHeaderItem from './SidebarHeaderItem.astro';
-const label = Astro.url.pathname.startsWith('/tools') ? "Tools" : "Blog";
+const path = Astro.url.pathname;
+let label = path.startsWith('/tools') ? "Tools" : "Blog";
+if (path.startsWith('/lab')) label = "Lab";
+if (path === '/') label = "Home";
 ---
 
   <SidebarHeaderItem icon="lucide:quote" label="Home">

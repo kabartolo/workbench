@@ -46,7 +46,6 @@ async function fetchDevToArticles(username: string): Promise<Article[]> {
     `https://dev.to/api/articles?username=${username}`,
   );
   const list = await listRes.json();
-
   return Promise.all(
     list.map(async (item: { id: number }) => {
       const res = await fetch(`https://dev.to/api/articles/${item.id}`);
@@ -80,7 +79,30 @@ async function parseArticle(
   return { id: String(article.id), data, digest: generateDigest(data) };
 }
 
-// --- Loaders ---
+// --- Real Loaders ---
+export function devToLoader(username: string): Loader {
+  return {
+    name: 'devto-loader',
+    load: async ({ store, parseData, generateDigest }) => {
+      const articles = await fetchDevToArticles(username);
+      store.clear();
+
+      for (const article of articles) {
+        const { id, data, digest } = await parseArticle(article, {
+          parseData,
+          generateDigest,
+        });
+        store.set({
+          id,
+          data,
+          digest,
+        });
+      }
+    },
+  };
+}
+
+// --- Lab Loaders ---
 
 export function devToLoaderBase(username: string): Loader {
   return {

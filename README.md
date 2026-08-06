@@ -9,5 +9,3 @@ This is a monorepo for developing and experimenting with tools that make life ea
 My personal site: [katebartolo.dev](https://katebartolo.dev)
 
 For the site code, see `apps/site`. Note this is a major work in progress and brand new. Check back later for more.
-
-This is my sanctuary for slow code projects and thoughtful design.

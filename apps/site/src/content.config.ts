@@ -4,7 +4,11 @@ import { z } from 'astro/zod';
 
 import { packageDocsLoader } from './github-loader.js';
 
-import { devToLoaderBase, devToLoaderRehype } from './markdown-loaders.js';
+import {
+  devToLoader,
+  devToLoaderBase,
+  devToLoaderRehype,
+} from './markdown-loaders.js';
 
 const docs = defineCollection({
   // Load Markdown and MDX files in the `src/content/docs/` directory.
@@ -36,6 +40,18 @@ const packageDocs = defineCollection({
 export const collections = {
   packageDocs,
   docs,
+  devTo: defineCollection({
+    loader: devToLoader('kabartolo'),
+    schema: z.object({
+      title: z.string(),
+      slug: z.string(),
+      description: z.string(),
+      publishedAt: z.date(),
+      markdown: z.string(),
+      html: z.string(),
+    }),
+  }),
+  // Lab collections
   devToBaseline: defineCollection({
     loader: devToLoaderBase('kabartolo'),
     schema: z.object({

@@ -5,16 +5,15 @@ import CardGrid from '../components/CardGrid.astro';
 import Card from '../components/Card.astro';
 import { getCollection } from 'astro:content';
 
-const posts = await getCollection('devToRehype');
+const posts = await getCollection('devTo');
 
 ---
 
 <Docs title="">
 	<LandingHero
-		title="DX Lab"
-		description="I build tools and plugins that optimize the developer and writer experience. 
-		DX Lab is where I open-source my solutions and document my processes. This site is brand new.
-		Please check back for updates."
+		title="Kate Bartolo"
+		description="This is my sanctuary for slow code projects and thoughtful design,
+		and exploring the space where content strategy meets engineering."
 		buttons={[
 			{ label: 'Read the blog', href: '/blog', variant: 'primary' },
 			{ label: 'View tools', href: '/tools/docs', variant: 'secondary' },

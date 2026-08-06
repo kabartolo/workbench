@@ -6,4 +6,5 @@ export const SITE_DESCRIPTION = '';
 export const NAV = [
   { label: 'Blog', link: '/blog' },
   { label: 'Tools', link: '/tools/docs' },
+  { label: 'Lab', link: '/lab' },
 ];
